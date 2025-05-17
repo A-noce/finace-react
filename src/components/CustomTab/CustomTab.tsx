@@ -17,6 +17,7 @@ import {
 import { usebStyles } from "./styles";
 
 export const CustomTab = ({
+  id,
   index,
   onChange,
   children,
@@ -30,15 +31,12 @@ export const CustomTab = ({
   const tabFiltered = useMemo<TabData[]>(() => {
     const tabDataTemp: TabData[] = [];
     Children.forEach(children, (el, i) => {
-      if (
-        !isValidElement(el) ||
-        typeof el.type !== "function"
-      ) {
+      if (!isValidElement(el) || typeof el.type !== "function") {
         throw new Error("Not valid element");
       }
       tabDataTemp.push({
         index: i,
-        ...el.props as any,
+        ...(el.props as any),
       });
     });
 
@@ -68,6 +66,7 @@ export const CustomTab = ({
   return (
     <Box sx={classes("container")}>
       <Tabs
+        id={id}
         variant="scrollable"
         allowScrollButtonsMobile
         scrollButtons={"auto"}

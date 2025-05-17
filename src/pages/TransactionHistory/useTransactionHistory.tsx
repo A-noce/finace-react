@@ -1,52 +1,121 @@
 import CustomChip from "@components/CustomChip";
+import { ColumnAction, ColumnsProps } from "@components/CustomTable/types";
 import useFormElement from "@components/form/CustomFormElements/useFormElement";
 import { useFetchData } from "@hooks/useFetchData";
+import { useModal } from "@hooks/useModal";
 import { usePaginatedList } from "@hooks/usePaginatedList";
 import useService from "@hooks/useServicw";
 import { Box } from "@mui/material";
 import { tagHistoryService } from "@service/tagHistoryService";
 import { transactionHistoryService } from "@service/transactionHistoryService";
-import { FormFilterTransactionHistory } from "@typing/transaction-history.type";
-import { HTMLAttributes, useState } from "react";
+import {
+  FormFilterTransactionHistory,
+  TransactionHistoryResponse,
+} from "@typing/transaction-history.type";
+import { format, parseISO } from "date-fns";
+import { HTMLAttributes } from "react";
+import { FaPen } from "react-icons/fa";
 import zod from "zod";
 
 export const useTransactionHistory = () => {
-  const [tabIndex, setTabIndex] = useState(0)
-  const { control, handleSubmit} = useFormElement<FormFilterTransactionHistory>({
-    defaultValues: {
-      startDate: "",
-      endDate: "",
-      description: "",
-      title: "",
-      maximumValue: null,
-      minimumValue: null,
-    },
-    validation: zod.object({
-      startDate: zod.string(),
-      endDate: zod.string(),
-      description: zod.string(),
-      title: zod.string(),
-      maximumValue: zod.number().nullable(),
-      minimumValue: zod.number().nullable(),
-    }),
-  });
+    const {
+      onClose,
+      onOpen,
+      data: modalData,
+    } = useModal<"new" | number>({});
+  const { control, handleSubmit, reset } =
+    useFormElement<FormFilterTransactionHistory>({
+      defaultValues: {
+        startDate: "",
+        endDate: "",
+        description: "",
+        title: "",
+        maximumValue: null,
+        minimumValue: null,
+      },
+      validation: zod.object({
+        startDate: zod.string(),
+        endDate: zod.string(),
+        description: zod.string(),
+        title: zod.string(),
+        maximumValue: zod.number().nullable(),
+        minimumValue: zod.number().nullable(),
+      }),
+    });
 
   const filterTransactionTag = useService(
     transactionHistoryService
   ).filterTransaction;
   const filterTagHistory = useService(tagHistoryService).filterTags;
 
-  const { data: tagHistoryList} = useFetchData(() => filterTagHistory(), []);
+  const { data: tagHistoryList } = useFetchData(() => filterTagHistory(), []);
 
-  const { data, handleChangeParams, loading } = usePaginatedList({ fetchFn: filterTransactionTag });
+  const {
+    data,
+    handleChangeParams,
+    loading,
+    handleChangeOrder,
+    handleChangePage,
+  } = usePaginatedList({ fetchFn: filterTransactionTag });
 
-    const handleFilterSubmit = (filter: FormFilterTransactionHistory) => {
-      handleChangeParams(filter);
+  const handleFilterSubmit = (filter: FormFilterTransactionHistory) => {
+    handleChangeParams(filter);
+  };
+
+  const submit = handleSubmit(handleFilterSubmit);
+
+    const handleEdit = ({ id }: TransactionHistoryResponse) => {
+      onOpen(id);
     };
 
-  const submit = handleSubmit(handleFilterSubmit)
+  const columns: ColumnsProps<TransactionHistoryResponse>[] = [
+    {
+      field: "title",
+      title: "Title",
+      enableSort: true,
+    },
+    {
+      field: "date",
+      title: "Date",
+      enableSort: true,
+      render: ({ createdAt }) => format(parseISO(createdAt), "yyyy-MM-dd"),
+    },
+    {
+      field: "value",
+      title: "Value",
+      enableSort: true,
+      render: ({ value }) =>
+        value.toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
+    },
+    {
+      field: "inputTagList",
+      title: "Input",
+      render: ({ inputTagList }) =>
+        inputTagList.map(({ name, color }) => (
+          <CustomChip label={name} color={color} />
+        )),
+      cellStyle: { textAlign: "center" },
+    },
+    {
+      field: "outputTagList",
+      title: "Output",
+      render: ({ outputTagList }) =>
+        outputTagList.map(({ name, color }) => (
+          <CustomChip label={name} color={color} />
+        )),
+      cellStyle: { textAlign: "center" },
+    },
+  ];
 
-   const getTagProps = (tagIdList: number[]) => {
+    const action: ColumnAction<TransactionHistoryResponse>[] = [
+      {
+        icon: FaPen,
+        onClick: handleEdit,
+        tooltip: "Editar",
+      },
+    ];
+
+  const getTagProps = (tagIdList: number[]) => {
     const tagList = (tagHistoryList?.data ?? []).filter((tag) =>
       tagIdList.includes(tag.id)
     );
@@ -67,16 +136,24 @@ export const useTransactionHistory = () => {
       </Box>
     );
   };
-  
+
   return {
-    control,
-    data,
-    tagList: tagHistoryList?.data ?? [],
-    getTagOptionProps,
-    getTagProps,
-    tabIndex,
-    setTabIndex,
-    submit,
-     loading
+    create: () => onOpen('new'),
+    filterProps: {
+      control,
+      tagList: tagHistoryList?.data ?? [],
+      getTagOptionProps,
+      getTagProps,
+      submit,
+      loading,
+      onClear: reset
+    },
+    tableProps: {
+      handleChangeOrder,
+      handleChangePage,
+      data,
+      columns,
+      action
+    },
   };
 };

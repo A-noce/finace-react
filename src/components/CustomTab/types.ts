@@ -13,6 +13,7 @@ export type TabInfo = Omit<TabData, 'children'>;
 export type TabMode = 'default' | 'overlay';
 
 export interface CustomTabProps {
+  id: string
   onChange?: (tab: TabInfo) => void;
   index?: number;
   loading?: boolean;

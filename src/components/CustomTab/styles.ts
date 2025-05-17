@@ -9,6 +9,7 @@ export const usebStyles = makeSx((theme) => {
       height: '100%',
       overflow: 'auto',
       position: 'relative',
+      flex: '1 1 0'
     },
     tabContainer: {
       boxShadow: '3px 0px 10px 0px #3434341A',
@@ -59,7 +60,7 @@ export const usebStyles = makeSx((theme) => {
       return {
         borderTopLeftRadius: '8px',
         borderTopRightRadius: '8px',
-        backgroundColor: 'grey.50',
+        backgroundColor: theme.palette.grey[700],
         boxShadow: 'box-shadow: 3px 0px 10.1px 0px rgba(99, 99, 99, 0.1)',
         zIndex: 1,
         '&.Mui-selected': {
