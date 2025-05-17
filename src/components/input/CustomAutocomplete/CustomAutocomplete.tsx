@@ -42,22 +42,25 @@ export const CustomAutocomplete = <
       size={"small"}
       label={label || "Selecione"}
       variant="outlined"
-      inputProps={{
-        ...params.inputProps,
-        autoComplete: "off",
+      slotProps={{
+        htmlInput: {
+          ...params.inputProps,
+          autoComplete: "off",
+        },
+        input: {
+          ...params.InputProps,
+          size: 'small',
+          endAdornment: (
+            <React.Fragment>
+              {props.loading ? (
+                <CircularProgress color="inherit" size={20} />
+              ) : null}
+              {params.InputProps.endAdornment}
+            </React.Fragment>
+          ),
+        }
       }}
       {...TextFieldProps}
-      InputProps={{
-        ...params.InputProps,
-        endAdornment: (
-          <React.Fragment>
-            {props.loading ? (
-              <CircularProgress color="inherit" size={20} />
-            ) : null}
-            {params.InputProps.endAdornment}
-          </React.Fragment>
-        ),
-      }}
       sx={{
         "& .MuiOutlinedInput-root.MuiInputBase-sizeSmall": {
           paddingRight: "39px",

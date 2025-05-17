@@ -12,7 +12,7 @@ import zod from "zod";
 
 export const useTransactionHistory = () => {
   const [tabIndex, setTabIndex] = useState(0)
-  const methods = useFormElement<FormFilterTransactionHistory>({
+  const { control, handleSubmit} = useFormElement<FormFilterTransactionHistory>({
     defaultValues: {
       startDate: "",
       endDate: "",
@@ -38,7 +38,13 @@ export const useTransactionHistory = () => {
 
   const { data: tagHistoryList} = useFetchData(() => filterTagHistory(), []);
 
-  const { data } = usePaginatedList({ fetchFn: filterTransactionTag });
+  const { data, handleChangeParams, loading } = usePaginatedList({ fetchFn: filterTransactionTag });
+
+    const handleFilterSubmit = (filter: FormFilterTransactionHistory) => {
+      handleChangeParams(filter);
+    };
+
+  const submit = handleSubmit(handleFilterSubmit)
 
    const getTagProps = (tagIdList: number[]) => {
     const tagList = (tagHistoryList?.data ?? []).filter((tag) =>
@@ -63,10 +69,14 @@ export const useTransactionHistory = () => {
   };
   
   return {
-    methods,
+    control,
     data,
-    tagHistoryList,
+    tagList: tagHistoryList?.data ?? [],
     getTagOptionProps,
-    getTagProps
+    getTagProps,
+    tabIndex,
+    setTabIndex,
+    submit,
+     loading
   };
 };
