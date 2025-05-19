@@ -1,6 +1,8 @@
 import { makeSx } from "@styles/makeSx";
 
 export const usebStyles = makeSx((theme) => {
+  const isDark = theme.palette.mode === "dark";
+
   return {
     container: {
       display: 'flex',
@@ -60,7 +62,7 @@ export const usebStyles = makeSx((theme) => {
       return {
         borderTopLeftRadius: '8px',
         borderTopRightRadius: '8px',
-        backgroundColor: theme.palette.grey[700],
+        backgroundColor: isDark ? theme.palette.grey[700] : undefined,
         boxShadow: 'box-shadow: 3px 0px 10.1px 0px rgba(99, 99, 99, 0.1)',
         zIndex: 1,
         '&.Mui-selected': {
