@@ -14,6 +14,7 @@ interface ModalTransactionProps {
     props: HTMLAttributes<HTMLLIElement> & { key: any },
     option: number
   ) => ReactNode;
+  reSend: () => void
 }
 
 const ModalTransaction = ({ id, ...props }: ModalTransactionProps) => {

@@ -18,6 +18,7 @@ const TransactionHistory = () => {
         display={"flex"}
         flex={"1 1 0"}
         sx={{ overflowY: "auto" }}
+        height='100%'
       >
         <Tabs tableProps={tableProps} />
         <CustomFab

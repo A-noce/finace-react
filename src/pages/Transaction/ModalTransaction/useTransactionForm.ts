@@ -18,11 +18,13 @@ import zod from "zod";
 interface UseTransactionFormProps {
   id: "new" | number | undefined;
   closeModal: () => void;
+  reSend: () => void
 }
 
 export const useTransactionForm = ({
   id,
   closeModal,
+  reSend
 }: UseTransactionFormProps) => {
   const [status, setStatus] = useState(StatusEnum.IDLE);
   const setSnack = configStore.actions.setSnackProps;
@@ -49,8 +51,8 @@ export const useTransactionForm = ({
     defaultValues,
     validation: zod.object({
       description: zod.string().min(1),
-      listInputTagId: zod.array(zod.number()).min(1),
-      listOutputTagId: zod.array(zod.number()),
+      listInputTagId: zod.array(zod.number()),
+      listOutputTagId: zod.array(zod.number()).min(1),
       title: zod.string().min(1),
       periodicity: zod.nativeEnum(TransactionPeriodEnum),
       periodValue: zod.union([
@@ -95,6 +97,8 @@ export const useTransactionForm = ({
     setSnack(`Transactiom ${isNew ? "cration" : "update"} success.`, "success");
     setStatus(StatusEnum.IDLE);
     closeModal();
+    methods.reset()
+    reSend()
   };
   const title = `${isNew ? "Create" : "Update"} transaction`;
   const loading = loadingTransaction || status === StatusEnum.LOADING;

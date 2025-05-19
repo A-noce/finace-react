@@ -47,6 +47,7 @@ export const useTransaction = () => {
     control,
     reset: resetForm,
     handleSubmit,
+    getValues
   } = useFormElement<FormFilterTransaction>({
     defaultValues: {
       title: "",
@@ -144,6 +145,10 @@ export const useTransaction = () => {
     },
   ];
 
+  const reSend = () => {
+    handleChangeParams(getValues())
+  }
+
   const getTagProps = (tagIdList: number[]) => {
     const tagList = (tagData?.data ?? []).filter((tag) =>
       tagIdList.includes(tag.id)
@@ -189,6 +194,7 @@ export const useTransaction = () => {
       tagList: tagData?.data ?? [],
       getTagProps,
       getTagOptionProps,
+      reSend
     },
   };
 };

@@ -4,6 +4,7 @@ import {
   ColumnsProps,
   OrderParam,
 } from "@components/CustomTable/types";
+import { Grid } from "@mui/material";
 import { Paginated } from "@typing/generic";
 import { TransactionHistoryResponse } from "@typing/transaction-history.type";
 
@@ -25,6 +26,13 @@ export const TransactionHistoryTable = ({
   action,
 }: TransactionHistoryTableProps) => {
   return (
+    <Grid
+      size={{ xs: "grow" }}
+      display={"flex"}
+      flex={"1 1 0"}
+      sx={{ overflowY: "auto" }}
+      height="100%"
+    >
       <CustomTable
         id="table-transaction-history"
         data={data.data}
@@ -34,5 +42,6 @@ export const TransactionHistoryTable = ({
         handlePageRequest={handleChangePage}
         handleSortRequest={handleChangeOrder}
       />
+    </Grid>
   );
 };

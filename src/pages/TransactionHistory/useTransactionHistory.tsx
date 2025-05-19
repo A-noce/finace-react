@@ -32,6 +32,7 @@ export const useTransactionHistory = () => {
         title: "",
         maximumValue: null,
         minimumValue: null,
+        tag: undefined
       },
       validation: zod.object({
         startDate: zod.string(),

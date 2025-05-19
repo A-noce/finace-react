@@ -34,6 +34,7 @@ export const useTag = () => {
     control,
     reset: resetForm,
     handleSubmit,
+    getValues
   } = useFormElement<FormFilterTag>({
     defaultValues: {
       name: "",
@@ -68,6 +69,10 @@ export const useTag = () => {
     reset();
     resetForm();
   };
+
+  const reSearch = () => {
+    handleChangeParams(getValues())
+  }
 
   const columns: ColumnsProps<TagResponse>[] = useMemo(() => {
     const tempColumns: ColumnsProps<TagResponse>[] = [
@@ -113,6 +118,7 @@ export const useTag = () => {
     formId: "tag-form-filter",
     openFilter: () => onOpen("filter"),
     closeModal: () => onClose(),
-    createTag: () => onOpen('new')
+    createTag: () => onOpen('new'),
+    reSearch
   };
 };

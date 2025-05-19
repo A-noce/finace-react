@@ -28,7 +28,7 @@ const Tabs = ({ tableProps }: TabsProps) => {
       <CustomTabPanel label="Table" name="table">
         <TransactionHistoryTable {...tableProps} />
       </CustomTabPanel>
-      <CustomTabPanel label="Table" name="table">
+      <CustomTabPanel label="Graph" name="table">
         <TransactionHistoryLineChart data={tableProps.data.data} />
       </CustomTabPanel>
     </CustomTab>

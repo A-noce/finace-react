@@ -5,6 +5,7 @@ import { useFormTag } from "./useFormTag";
 interface ModalTagProps {
   id: "new" | number | undefined;
   onClose: () => void;
+  reSearch: () => void
 }
 
 const ModalTag = (props: ModalTagProps) => {
