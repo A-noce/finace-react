@@ -11,6 +11,7 @@ return Object.entries(firstObj).reduce((acc: Record<string, any>,  [k,v]) => {
 
 export const removeEmptyValues = <T extends Record<string, any>>(data: T) => {
     return Object.entries(data).reduce((acc: Partial<T>, [k, v]) => {
+        
         if(!v) return acc
         acc[k as keyof T]  = v
         return acc

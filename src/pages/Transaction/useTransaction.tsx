@@ -14,7 +14,7 @@ import {
   periodicityEnumToString,
   TransactionResponse,
 } from "@typing/transaction.type";
-import { format, parseISO } from "date-fns";
+import { convertToCurrency } from "@utils/converterutils";import { formatDate } from "@utils/dateUtils";
 import { HTMLAttributes, useMemo } from "react";
 import { FaPen } from "react-icons/fa6";
 import zod from "zod";
@@ -107,13 +107,13 @@ export const useTransaction = () => {
         title: "Value",
         enableSort: true,
         render: ({ value }) =>
-          value.toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
+          convertToCurrency(value),
       },
       {
         field: "createdAt",
         title: "Creation Date",
         enableSort: true,
-        render: ({ createdAt }) => format(parseISO(createdAt), "yyyy-MM-dd"),
+        render: ({ createdAt }) => formatDate(createdAt),
       },
       {
         field: "inputTagList",

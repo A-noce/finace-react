@@ -12,17 +12,14 @@ import {
   FormFilterTransactionHistory,
   TransactionHistoryResponse,
 } from "@typing/transaction-history.type";
-import { format, parseISO } from "date-fns";
+import { convertToCurrency } from "@utils/converterutils";
+import { formatDate } from "@utils/dateUtils";
 import { HTMLAttributes } from "react";
 import { FaPen } from "react-icons/fa";
 import zod from "zod";
 
 export const useTransactionHistory = () => {
-    const {
-      onClose,
-      onOpen,
-      data: modalData,
-    } = useModal<"new" | number>({});
+  const { onClose, onOpen, data: modalData } = useModal<"new" | number>({});
   const { control, handleSubmit, reset } =
     useFormElement<FormFilterTransactionHistory>({
       defaultValues: {
@@ -32,7 +29,7 @@ export const useTransactionHistory = () => {
         title: "",
         maximumValue: null,
         minimumValue: null,
-        tag: undefined
+        tag: undefined,
       },
       validation: zod.object({
         startDate: zod.string(),
@@ -41,9 +38,9 @@ export const useTransactionHistory = () => {
         title: zod.string(),
         maximumValue: zod.number().nullable(),
         minimumValue: zod.number().nullable(),
+        tag: zod.array(zod.number()).optional()
       }),
     });
-
   const filterTransactionTag = useService(
     transactionHistoryService
   ).filterTransaction;
@@ -65,9 +62,9 @@ export const useTransactionHistory = () => {
 
   const submit = handleSubmit(handleFilterSubmit);
 
-    const handleEdit = ({ id }: TransactionHistoryResponse) => {
-      onOpen(id);
-    };
+  const handleEdit = ({ id }: TransactionHistoryResponse) => {
+    onOpen(id);
+  };
 
   const columns: ColumnsProps<TransactionHistoryResponse>[] = [
     {
@@ -79,14 +76,13 @@ export const useTransactionHistory = () => {
       field: "date",
       title: "Date",
       enableSort: true,
-      render: ({ createdAt }) => format(parseISO(createdAt), "yyyy-MM-dd"),
+      render: ({ date }) => formatDate(date),
     },
     {
       field: "value",
       title: "Value",
       enableSort: true,
-      render: ({ value }) =>
-        value.toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
+      render: ({ value }) => convertToCurrency(value),
     },
     {
       field: "inputTagList",
@@ -108,13 +104,13 @@ export const useTransactionHistory = () => {
     },
   ];
 
-    const action: ColumnAction<TransactionHistoryResponse>[] = [
-      {
-        icon: FaPen,
-        onClick: handleEdit,
-        tooltip: "Editar",
-      },
-    ];
+  const action: ColumnAction<TransactionHistoryResponse>[] = [
+    {
+      icon: FaPen,
+      onClick: handleEdit,
+      tooltip: "Editar",
+    },
+  ];
 
   const getTagProps = (tagIdList: number[]) => {
     const tagList = (tagHistoryList?.data ?? []).filter((tag) =>
@@ -139,7 +135,7 @@ export const useTransactionHistory = () => {
   };
 
   return {
-    create: () => onOpen('new'),
+    create: () => onOpen("new"),
     filterProps: {
       control,
       tagList: tagHistoryList?.data ?? [],
@@ -147,14 +143,14 @@ export const useTransactionHistory = () => {
       getTagProps,
       submit,
       loading,
-      onClear: reset
+      onClear: reset,
     },
     tableProps: {
       handleChangeOrder,
       handleChangePage,
       data,
       columns,
-      action
+      action,
     },
   };
 };

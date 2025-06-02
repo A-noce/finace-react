@@ -7,7 +7,7 @@ export const stringToDate = (value: string) => {
     return new Date(value)
   }
   
-  export const formatDate = (  date: NullUndefined<number | string | Date>, pattern = 'dd/MM/yyyy') => {
+  export const formatDate = (  date: NullUndefined<number | string | Date>, pattern = 'MM/dd/yyyy') => {
     if(!date) return ''
     const isLocalDate = typeof date === 'string' && !date.includes(':')
     const convertedDate = isLocalDate ? parseISO(date) : new Date(date)

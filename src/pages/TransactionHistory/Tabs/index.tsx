@@ -8,7 +8,7 @@ import {
 import { Paginated } from "@typing/generic";
 import { TransactionHistoryResponse } from "@typing/transaction-history.type";
 import { TransactionHistoryTable } from "./TransactionHistoryTable";
-import { TransactionHistoryLineChart } from "./TransactionHiistoryLineChart";
+import { TransactionHistoryLineChart } from "./TransactionHistoryLineChart";
 
 interface TabsProps {
   tableProps: {
@@ -28,7 +28,7 @@ const Tabs = ({ tableProps }: TabsProps) => {
       <CustomTabPanel label="Table" name="table">
         <TransactionHistoryTable {...tableProps} />
       </CustomTabPanel>
-      <CustomTabPanel label="Graph" name="table">
+      <CustomTabPanel label="Graph" name="graph">
         <TransactionHistoryLineChart data={tableProps.data.data} />
       </CustomTabPanel>
     </CustomTab>
