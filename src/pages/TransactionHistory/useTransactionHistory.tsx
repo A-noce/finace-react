@@ -5,7 +5,7 @@ import { useFetchData } from "@hooks/useFetchData";
 import { useModal } from "@hooks/useModal";
 import { usePaginatedList } from "@hooks/usePaginatedList";
 import useService from "@hooks/useServicw";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { tagHistoryService } from "@service/tagHistoryService";
 import { transactionHistoryService } from "@service/transactionHistoryService";
 import {
@@ -20,7 +20,7 @@ import zod from "zod";
 
 export const useTransactionHistory = () => {
   const { onClose, onOpen, data: modalData } = useModal<"new" | number>({});
-  const { control, handleSubmit, reset } =
+  const { control, handleSubmit, reset, getValues } =
     useFormElement<FormFilterTransactionHistory>({
       defaultValues: {
         startDate: "",
@@ -82,7 +82,8 @@ export const useTransactionHistory = () => {
       field: "value",
       title: "Value",
       enableSort: true,
-      render: ({ value }) => convertToCurrency(value),
+      render: ({ value }) => 
+        <Typography color={value < 0 ? 'error' : undefined}>{ convertToCurrency(value)}</Typography>,
     },
     {
       field: "inputTagList",
@@ -112,10 +113,15 @@ export const useTransactionHistory = () => {
     },
   ];
 
+    const reSend = () => {
+    handleChangeParams(getValues());
+  };
+
   const getTagProps = (tagIdList: number[]) => {
     const tagList = (tagHistoryList?.data ?? []).filter((tag) =>
       tagIdList.includes(tag.id)
     );
+    if(!tagIdList.length) return null
     return tagList.map((tag) => (
       <CustomChip label={tag.name} color={tag.color} size="small" />
     ));
@@ -134,6 +140,10 @@ export const useTransactionHistory = () => {
     );
   };
 
+    const getOptionLabel = (option: number) => {
+    return tagHistoryList?.data?.find(({ id }) => option === id)?.name ?? "";
+  };
+
   return {
     create: () => onOpen("new"),
     filterProps: {
@@ -144,6 +154,7 @@ export const useTransactionHistory = () => {
       submit,
       loading,
       onClear: reset,
+      getOptionLabel
     },
     tableProps: {
       handleChangeOrder,
@@ -152,5 +163,14 @@ export const useTransactionHistory = () => {
       columns,
       action,
     },
+    modalProps: {
+      id: modalData,
+      closeModal: onClose,
+      tagList: tagHistoryList?.data ?? [],
+      getOptionLabel,
+      getTagOptionProps,
+      getTagProps,
+      reSend
+    }
   };
 };

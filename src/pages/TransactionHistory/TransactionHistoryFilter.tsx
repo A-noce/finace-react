@@ -5,6 +5,7 @@ import FormTextField from "@components/form/inputs/FormTextField";
 import { CustomIconButton } from "@components/input";
 import { CustomIconButtonProps } from "@components/input/CustomIconButton";
 import { Box, Button, Collapse, Grid, Paper } from "@mui/material";
+import { Null } from "@typing/generic";
 import { TagResponse } from "@typing/tag.type";
 import { FormFilterTransactionHistory } from "@typing/transaction-history.type";
 import { HTMLAttributes, ReactNode, useState } from "react";
@@ -17,11 +18,12 @@ interface TransactionFilterHistoryProps {
   submit: () => void;
   onClear: () => void;
   tagList: TagResponse[];
-  getTagProps: (id: number[]) => ReactNode[];
+  getTagProps: (id: number[]) => Null<ReactNode[]>;
   getTagOptionProps: (
     props: HTMLAttributes<HTMLLIElement> & { key: any },
     option: number
   ) => ReactNode;
+  getOptionLabel: (option: number) => string;
 }
 
 const TransactionFilterHistory = ({
@@ -32,6 +34,7 @@ const TransactionFilterHistory = ({
   getTagProps,
   tagList,
   onClear,
+  getOptionLabel,
 }: TransactionFilterHistoryProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const props: CustomIconButtonProps = {
@@ -88,6 +91,7 @@ const TransactionFilterHistory = ({
               options={tagList.map(({ id }) => id)}
               renderValue={getTagProps}
               renderOption={getTagOptionProps}
+              getOptionLabel={getOptionLabel}
               multiple
             />
           </Grid>

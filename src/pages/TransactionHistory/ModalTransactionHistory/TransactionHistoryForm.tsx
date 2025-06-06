@@ -1,18 +1,15 @@
 import { Grid } from "@mui/material";
 import FormTextField from "@components/form/inputs/FormTextField";
-import { FormTransaction } from "@typing/transaction.type";
 import { TagResponse } from "@typing/tag.type";
 import { HTMLAttributes, ReactNode } from "react";
 import FormAutoComplete from "@components/form/inputs/FormAutocomplete";
-import { SelectOptionProp } from "@components/input/CustomSelect";
-import { TransactionPeriodEnum } from "@typing/enums";
-import FormSelect from "@components/form/inputs/FormSelect";
 import FormNumberField from "@components/form/inputs/FormNumberField";
 import { useFormContext } from "react-hook-form";
-import PeriodValueField from "./PeriodiValueField";
 import { Null } from "@typing/generic";
+import { FormTransactionHistory } from "@typing/transaction-history.type";
+import FormDatePicker from "@components/form/inputs/FormDatePicker";
 
-interface TransactionFormProps {
+interface TransactionHistoryFormProps {
   handleSubmit: () => void;
   tagList: TagResponse[];
   getTagProps: (id: number[]) => Null<ReactNode[]>;
@@ -20,19 +17,17 @@ interface TransactionFormProps {
     props: HTMLAttributes<HTMLLIElement> & { key: any },
     option: number
   ) => ReactNode;
-  transactionPeriodicityOptions: SelectOptionProp<TransactionPeriodEnum>[];
-  getOptionLabel: (option: number) => string
+  getOptionLabel: (option: number) => string;
 }
 
-const TransactionForm = ({
+const TransactionHistoryForm = ({
   handleSubmit,
   tagList,
   getTagProps,
   getTagOptionProps,
-  transactionPeriodicityOptions,
-  getOptionLabel
-}: TransactionFormProps) => {
-  const { control } = useFormContext<FormTransaction>();
+  getOptionLabel,
+}: TransactionHistoryFormProps) => {
+  const { control } = useFormContext<FormTransactionHistory>();
   return (
     <Grid
       container
@@ -41,7 +36,7 @@ const TransactionForm = ({
       padding={2}
       component="form"
       onSubmit={handleSubmit}
-      id="transaction-modal"
+      id="transaction-history-modal"
     >
       <Grid size={{ xs: 12 }}>
         <FormTextField
@@ -63,7 +58,7 @@ const TransactionForm = ({
           fullWidth
         />
       </Grid>
-      <Grid size={{ xs: 12}}>
+      <Grid size={{ xs: 12, sm: 6 }}>
         <FormNumberField
           id="form-transaction-value"
           label="Value*"
@@ -74,19 +69,15 @@ const TransactionForm = ({
         />
       </Grid>
       <Grid size={{ xs: 12, sm: 6 }}>
-        <FormSelect
-          id="form-transaction-periodicity"
-          label="Periodicity"
+        <FormDatePicker
+          id="form-transaction-history-date"
+          label="Date*"
           control={control}
-          name="periodicity"
-          options={transactionPeriodicityOptions}
+          name="date"
+          type="localDate"
           fullWidth
         />
       </Grid>
-      <Grid size={{ xs: 12, sm: 6 }}>
-        <PeriodValueField />
-      </Grid>
-
       <Grid size={{ xs: 12, sm: 6 }}>
         <FormAutoComplete
           id="form-transaction-input-tag"
@@ -97,7 +88,7 @@ const TransactionForm = ({
           options={tagList.map(({ id }) => id)}
           renderValue={getTagProps}
           renderOption={getTagOptionProps}
-            getOptionLabel={getOptionLabel}
+          getOptionLabel={getOptionLabel}
           multiple
         />
       </Grid>
@@ -111,7 +102,7 @@ const TransactionForm = ({
           options={tagList.map(({ id }) => id)}
           renderValue={getTagProps}
           renderOption={getTagOptionProps}
-            getOptionLabel={getOptionLabel}
+          getOptionLabel={getOptionLabel}
           multiple
         />
       </Grid>
@@ -119,4 +110,4 @@ const TransactionForm = ({
   );
 };
 
-export default TransactionForm;
+export default TransactionHistoryForm;

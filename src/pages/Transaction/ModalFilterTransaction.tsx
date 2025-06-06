@@ -5,6 +5,7 @@ import FormNumberField from "@components/form/inputs/FormNumberField";
 import FormTextField from "@components/form/inputs/FormTextField";
 import { Grid } from "@mui/material";
 import { TransactionPeriodEnum } from "@typing/enums";
+import { Null } from "@typing/generic";
 import { TagResponse } from "@typing/tag.type";
 import { FormFilterTransaction } from "@typing/transaction.type";
 import { HTMLAttributes, ReactNode } from "react";
@@ -16,12 +17,13 @@ interface ModalFilterTransactionProps {
   control: Control<FormFilterTransaction>;
   closeModal: () => void;
   tagList: TagResponse[];
-  getTagProps: (id: number[]) => ReactNode[];
+  getTagProps: (id: number[]) => Null<ReactNode[]>;
   getTagOptionProps: (
     props: HTMLAttributes<HTMLLIElement> & { key: any },
     option: number
   ) => ReactNode;
   transactionPeriodicityOptions: TransactionPeriodEnum[];
+  getOptionLabel: (option: number) => string
 }
 
 const ModalFilterTransaction = ({
@@ -33,6 +35,7 @@ const ModalFilterTransaction = ({
   getTagProps,
   tagList,
   transactionPeriodicityOptions,
+  getOptionLabel
 }: ModalFilterTransactionProps) => {
   return (
     <CustomModal
@@ -116,6 +119,7 @@ const ModalFilterTransaction = ({
             options={tagList.map(({ id }) => id)}
             renderValue={getTagProps}
             renderOption={getTagOptionProps}
+            getOptionLabel={getOptionLabel}
             multiple
           />
         </Grid>
@@ -129,6 +133,7 @@ const ModalFilterTransaction = ({
             options={tagList.map(({ id }) => id)}
             renderValue={getTagProps}
             renderOption={getTagOptionProps}
+            getOptionLabel={getOptionLabel}
             multiple
           />
         </Grid>
