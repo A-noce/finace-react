@@ -15,3 +15,10 @@ export const getCurrentHour = () => {
   const seconds = now.getSeconds();
   return hours * 60 * 60 + minutes * 60 + seconds;
 };
+
+export const convertToCurrency = (value: number) => {
+  return new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL'
+}).format(value);
+}

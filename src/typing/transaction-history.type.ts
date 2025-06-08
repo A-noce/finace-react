@@ -32,6 +32,7 @@ export interface FormFilterTransactionHistory
   endDate?: string;
   minimumValue?: number;
   maximumValue?: number;
+  tag?: number[]
 }
 
 export interface generateTransactionHistoryRequest {

@@ -6,15 +6,16 @@ import configStore from "@store/configStore";
 import { StatusEnum } from "@typing/generic";
 import { FormTag, Tag } from "@typing/tag.type";
 import { compareObjectsAndFormat } from "@utils/manipulateObjectUtils";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import zod from "zod";
 
 interface UseFormTagProps {
   id: "new" | number | undefined;
   onClose: () => void;
+  reSearch: () => void
 }
 
-export const useFormTag = ({ id, onClose }: UseFormTagProps) => {
+export const useFormTag = ({ id, onClose, reSearch }: UseFormTagProps) => {
   const isNew = id === "new";
   const setSnack = configStore.actions.setSnackProps;
   const [status, setStatus] = useState(StatusEnum.IDLE);
@@ -53,7 +54,7 @@ export const useFormTag = ({ id, onClose }: UseFormTagProps) => {
     return await updateTag(id, tag);
   };
 
-  const submit = async (form: FormTag) => {
+  const submit = useCallback(async (form: FormTag) => {
     setStatus(StatusEnum.LOADING);
     const response = await handleSave(form);
     if (!response?.success) {
@@ -66,8 +67,10 @@ export const useFormTag = ({ id, onClose }: UseFormTagProps) => {
     }
     setSnack(`Tag ${isNew ? "cration" : "update"} success.`, "success");
     setStatus(StatusEnum.IDLE);
+    reset()
     onClose();
-  };
+    reSearch()
+  },[reSearch])
 
   const handleClose = () => {
     reset(defaultValues);

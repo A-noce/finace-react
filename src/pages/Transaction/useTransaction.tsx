@@ -14,7 +14,8 @@ import {
   periodicityEnumToString,
   TransactionResponse,
 } from "@typing/transaction.type";
-import { format, parseISO } from "date-fns";
+import { convertToCurrency } from "@utils/converterutils";
+import { formatDate } from "@utils/dateUtils";
 import { HTMLAttributes, useMemo } from "react";
 import { FaPen } from "react-icons/fa6";
 import zod from "zod";
@@ -47,6 +48,7 @@ export const useTransaction = () => {
     control,
     reset: resetForm,
     handleSubmit,
+    getValues,
   } = useFormElement<FormFilterTransaction>({
     defaultValues: {
       title: "",
@@ -105,14 +107,13 @@ export const useTransaction = () => {
         field: "value",
         title: "Value",
         enableSort: true,
-        render: ({ value }) =>
-          value.toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
+        render: ({ value }) => convertToCurrency(value),
       },
       {
         field: "createdAt",
         title: "Creation Date",
         enableSort: true,
-        render: ({ createdAt }) => format(parseISO(createdAt), "yyyy-MM-dd"),
+        render: ({ createdAt }) => formatDate(createdAt),
       },
       {
         field: "inputTagList",
@@ -144,10 +145,17 @@ export const useTransaction = () => {
     },
   ];
 
+  const reSend = () => {
+    handleChangeParams(getValues());
+  };
+
   const getTagProps = (tagIdList: number[]) => {
     const tagList = (tagData?.data ?? []).filter((tag) =>
       tagIdList.includes(tag.id)
     );
+    if (!tagIdList.length) {
+      return null;
+    }
     return tagList.map((tag) => (
       <CustomChip label={tag.name} color={tag.color} size="small" />
     ));
@@ -164,6 +172,10 @@ export const useTransaction = () => {
         <CustomChip label={tag.name} color={tag.color} size="small" />
       </Box>
     );
+  };
+
+  const getOptionLabel = (option: number) => {
+    return tagData?.data?.find(({ id }) => option === id)?.name ?? "";
   };
 
   const transactionPeriodicityOptions: TransactionPeriodEnum[] = Object.values(
@@ -189,6 +201,8 @@ export const useTransaction = () => {
       tagList: tagData?.data ?? [],
       getTagProps,
       getTagOptionProps,
+      getOptionLabel,
+      reSend,
     },
   };
 };

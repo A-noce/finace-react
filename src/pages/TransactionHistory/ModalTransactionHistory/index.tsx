@@ -1,12 +1,12 @@
 import CustomModal from "@components/CustomModal";
-import { useTransactionForm } from "./useTransactionForm";
-import TransactionForm from "./TransactionForm";
+import { useTransactionHistoryForm } from "./useTransactionHistoryForm";
+import TransactionForm from "./TransactionHistoryForm";
 import { TagResponse } from "@typing/tag.type";
 import { HTMLAttributes, ReactNode } from "react";
 import FormElementProvider from "@components/form/CustomFormElements/FormElementProvider";
 import { Null } from "@typing/generic";
 
-interface ModalTransactionProps {
+interface ModalTransactionHistoryProps {
   id: "new" | number | undefined;
   closeModal: () => void;
   tagList: TagResponse[];
@@ -19,9 +19,9 @@ interface ModalTransactionProps {
   getOptionLabel: (option: number) => string
 }
 
-const ModalTransaction = ({ id, ...props }: ModalTransactionProps) => {
+const ModalTransactionHistory = ({ id, ...props }: ModalTransactionHistoryProps) => {
   const { title, loading, handleClose, methods, ...hookProps } =
-    useTransactionForm({
+    useTransactionHistoryForm({
       id,
       ...props,
     });
@@ -30,7 +30,7 @@ const ModalTransaction = ({ id, ...props }: ModalTransactionProps) => {
       open={!!id}
       handleClose={handleClose}
       title={title}
-      confirmButtonProp={{ type: "submit", form: "transaction-modal", loading }}
+      confirmButtonProp={{ type: "submit", form: "transaction-history-modal", loading }}
       maxWidth="lg"
       fullWidth
     >
@@ -41,4 +41,4 @@ const ModalTransaction = ({ id, ...props }: ModalTransactionProps) => {
   );
 };
 
-export default ModalTransaction;
+export default ModalTransactionHistory;

@@ -17,6 +17,7 @@ const Tags = () => {
     modalData,
     closeModal,
     createTag,
+    reSearch,
     ...rest
   } = useTag();
   return (
@@ -53,7 +54,7 @@ const Tags = () => {
         onCloseFilter={closeModal}
       />
       {modalData !== "filter" && (
-        <ModalTag id={modalData} onClose={closeModal} />
+        <ModalTag id={modalData} onClose={closeModal} reSearch={reSearch} />
       )}
     </Grid>
   );

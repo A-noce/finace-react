@@ -3,7 +3,7 @@ import { Paginated, PaginatedFilter } from "@typing/generic";
 import { FormFilterTag, Tag, TagResponse } from "@typing/tag.type";
 import { parseResponseData } from "@utils/parseResponseData";
 
-export const tagHistoryService = makeService('/tag', ({ get, patch  }) => {
+export const tagHistoryService = makeService('/tag-history', ({ get, patch  }) => {
     const filterTags = async (params?: PaginatedFilter<FormFilterTag>) => {
         const { response } = get<Paginated<TagResponse>>('/filter', params )
         return response.then(parseResponseData)
