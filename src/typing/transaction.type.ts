@@ -22,7 +22,6 @@ export interface FormTransaction
 }
 
 export interface TransactionRequest extends Omit<FormTransaction, 'periodValue'> {
-  userId: number;
   periodValue: string
 }
 

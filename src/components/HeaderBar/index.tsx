@@ -1,10 +1,10 @@
 import { AppBar, Grid, Toolbar } from "@mui/material";
-import ModeButton from "@components/HeaderBar/ModeButton";
 import { useStyles } from "./styles";
 import { FaAngleRight } from "react-icons/fa6";
 import CustomIconButton from "@components/input/CustomIconButton";
 import { useTracked } from "zustand-x";
 import configStore from "@store/configStore";
+import AvatarButton from "./AvatarButton";
 
 const HeaderBar = () => {
   const isDrawerOpen = useTracked(configStore, 'drawerOpen')
@@ -26,7 +26,7 @@ const HeaderBar = () => {
             </Grid>
           )}
           <Grid>
-            <ModeButton />
+            <AvatarButton />
           </Grid>
         </Grid>
       </Toolbar>

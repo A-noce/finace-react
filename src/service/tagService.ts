@@ -1,6 +1,6 @@
 import { makeService } from "@components/makeService/makeService";
 import { Paginated, PaginatedFilter } from "@typing/generic";
-import { FormFilterTag, Tag, TagResponse } from "@typing/tag.type";
+import { FormFilterTag, FormTag, TagResponse } from "@typing/tag.type";
 import { parseResponseData } from "@utils/parseResponseData";
 
 export const tagService = makeService('/tag', ({ get, post, patch  }) => {
@@ -14,12 +14,12 @@ export const tagService = makeService('/tag', ({ get, post, patch  }) => {
         return response.then(parseResponseData)
     }
 
-    const createTag = async (tag: Tag) => {
+    const createTag = async (tag: FormTag) => {
         const { response } = post<TagResponse>('', tag)
         return response.then(parseResponseData)
     }
 
-    const updateTag = async (id: string | number,tag: Partial<Tag>) => {
+    const updateTag = async (id: string | number,tag: Partial<FormTag>) => {
         const { response } = patch<TagResponse>(`/${id}`, tag)
         return response.then(parseResponseData)
     }

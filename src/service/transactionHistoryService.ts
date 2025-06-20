@@ -1,6 +1,6 @@
 import { makeService } from "@components/makeService/makeService";
 import { Paginated, PaginatedFilter } from "@typing/generic";
-import { FormFilterTransactionHistory, generateTransactionHistoryRequest, TransactionHistoryRequest, TransactionHistoryResponse } from "@typing/transaction-history.type";
+import { FormFilterTransactionHistory, generateTransactionHistoryRequest, FormTransactionHistory, TransactionHistoryResponse } from "@typing/transaction-history.type";
 import { parseResponseData } from "@utils/parseResponseData";
 
 export const transactionHistoryService = makeService('/transaction-history', ({ get, post, patch }) => {
@@ -21,12 +21,12 @@ export const transactionHistoryService = makeService('/transaction-history', ({ 
         return response.then(parseResponseData)
     }
 
-    const createTransaction = async (form: TransactionHistoryRequest) => {
+    const createTransaction = async (form: FormTransactionHistory) => {
         const { response } = post<TransactionHistoryResponse>('', form)
         return response.then(parseResponseData)
     }
 
-    const updateTransaction = async (id: number | string, form: Partial<TransactionHistoryRequest>) => {
+    const updateTransaction = async (id: number | string, form: Partial<FormTransactionHistory>) => {
         const { response } = patch<TransactionHistoryResponse>(`/${id}`, form)
         return response.then(parseResponseData)
     }

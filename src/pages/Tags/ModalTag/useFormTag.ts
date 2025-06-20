@@ -4,7 +4,7 @@ import useService from "@hooks/useServicw";
 import { tagService } from "@service/tagService";
 import configStore from "@store/configStore";
 import { StatusEnum } from "@typing/generic";
-import { FormTag, Tag } from "@typing/tag.type";
+import { FormTag } from "@typing/tag.type";
 import { compareObjectsAndFormat } from "@utils/manipulateObjectUtils";
 import { useCallback, useEffect, useState } from "react";
 import zod from "zod";
@@ -43,11 +43,7 @@ export const useFormTag = ({ id, onClose, reSearch }: UseFormTagProps) => {
 
   const handleSave = async (form: FormTag) => {
     if (isNew) {
-      const tag: Tag = {
-        ...form,
-        userCreatorId: 1,
-      };
-      return await createTag(tag);
+      return await createTag(form);
     }
     if (!data || !id) return;
     const tag = compareObjectsAndFormat(data, form);

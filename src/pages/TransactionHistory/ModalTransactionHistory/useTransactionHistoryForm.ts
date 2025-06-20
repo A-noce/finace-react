@@ -7,8 +7,7 @@ import configStore from "@store/configStore";
 import { TransactionPeriodEnum } from "@typing/enums";
 import { PartialNullable, StatusEnum } from "@typing/generic";
 import {
-  FormTransactionHistory,
-  TransactionHistoryRequest,
+  FormTransactionHistory
 } from "@typing/transaction-history.type";
 import { periodicityEnumToString } from "@typing/transaction.type";
 import { compareObjectsAndFormat } from "@utils/manipulateObjectUtils";
@@ -60,12 +59,11 @@ export const useTransactionHistoryForm = ({
   });
 
   const handleSaveForm = async (form: FormTransactionHistory) => {
-    const request: TransactionHistoryRequest = { ...form, userId: 1 };
     if (isNew) {
-      return await createTransaction(request);
+      return await createTransaction(form);
     }
     if (!data || !id) return;
-    const filteredRequest = compareObjectsAndFormat(request, {
+    const filteredRequest = compareObjectsAndFormat(form, {
       ...data,
     });
     return await updateTransaction(id, filteredRequest);

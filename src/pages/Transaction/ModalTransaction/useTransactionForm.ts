@@ -67,7 +67,7 @@ export const useTransactionForm = ({
     const periodValue = Array.isArray(form.periodValue)
       ? form.periodValue.join(",")
       : form.periodValue;
-    const request: TransactionRequest = { ...form, userId: 1, periodValue };
+    const request: TransactionRequest = { ...form, periodValue };
     if (isNew) {
       return await createTransaction(request);
     }

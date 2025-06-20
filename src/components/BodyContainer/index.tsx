@@ -5,10 +5,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useTracked } from "zustand-x";
 import configStore from "@store/configStore";
+import { useSession } from "@hooks/useSession";
 
 const BodyContainer = ({ children }: PropsWithChildren<any>) => {
   const open = useTracked(configStore, 'drawerOpen')
   const sx = useStylesBodyContainer({ open });
+  useSession()
 
   return (
     <React.Suspense fallback={"carregando..."}>

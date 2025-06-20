@@ -13,6 +13,7 @@ export const useLogin = () => {
     const navigate = useNavigate();
     const setSnackProps = configStore.actions.setSnackProps
     const setLogged = userStore.actions.setLogged
+    const setUser = userStore.actions.setUser
         const {handleSubmit, watch, ...methods} = useFormElement<FormLogin>({
         defaultValues: { email: '', password: ''},
         validation: z.object({
@@ -28,6 +29,7 @@ export const useLogin = () => {
           setLogged(true)
             setSnackProps('Logado com sucesso', 'success')
             navigate('/home')
+            setUser(response.body)
             return
         }
         setSnackProps('Usuário ou senha errado', 'error')

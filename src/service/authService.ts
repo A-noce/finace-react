@@ -1,10 +1,10 @@
 import { makeService } from "@components/makeService/makeService";
-import { LoginResponse, User, UserResponse } from "@typing/user.type";
+import { User, UserResponse } from "@typing/user.type";
 import { parseResponseData } from "@utils/parseResponseData";
 
 export const authService = makeService('/auth', ({ get, post }) => {
     const login = async (request: User) => {
-        const { response } = post<LoginResponse>('/login', request)
+        const { response } = post<User>('/login', request)
         return response.then(parseResponseData)
     }
 
@@ -14,13 +14,18 @@ export const authService = makeService('/auth', ({ get, post }) => {
     }
 
     const session = async () => {
-        const { response } = get('/session')
+        const { response } = get<boolean>('/session')
         return response.then(parseResponseData)
     }
     
+        const logout = async () => {
+        const { response } = post<void>('/logout')
+        return response.then(parseResponseData)
+    }
     return {
         login,
         singUp,
-        session
+        session,
+        logout
     }
 })

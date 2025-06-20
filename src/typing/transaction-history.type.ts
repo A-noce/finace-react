@@ -19,10 +19,6 @@ export interface FormTransactionHistory
   listOutputTagId: number[];
 }
 
-export interface TransactionHistoryRequest extends FormTransactionHistory {
-  userId: number;
-}
-
 export interface FormFilterTransactionHistory
   extends Omit<
     TransactionHistory,
