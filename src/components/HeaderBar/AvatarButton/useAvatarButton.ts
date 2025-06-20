@@ -8,6 +8,7 @@ import { useTracked } from "zustand-x";
 
 export const useAvatarButton = () => {
   const toggleMode = configStore.actions.toggleMode;
+  const setUser = userStore.actions.setUser
   const mode = useTracked(configStore, "mode");
   const user = useTracked(userStore, "user");
   const isDark = mode === "dark";
@@ -27,8 +28,10 @@ export const useAvatarButton = () => {
   const onLogout = async () => {
     await logout();
     handleClose();
+    setUser(null)
     navigate("/login");
   };
+
   return {
     handleClick,
     handleClose,

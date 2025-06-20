@@ -10,26 +10,28 @@ export const useSession = () => {
   const { location } = useNavigation();
   const navigate = useNavigate();
   const isLogged = useTracked(userStore, "isLogged");
-  const setLogged = userStore.actions.setLogged;
+  const setUser = userStore.actions.setUser;
 
   const checkSession = async (path: string) => {
     const response = await session();
-    const isLoginPage = /login/i.test(path)
+    const isLoginPage = /login/i.test(path);
     if (response.success) {
-      setLogged(true);
+      setUser(response.body);
       navigate(isLoginPage ? "/home" : path);
     } else {
-      navigate(isLoginPage ? path : '/login');
+      setUser(null);
+      navigate("/login");
     }
   };
 
   useEffect(() => {
     if (!location) return;
-    if (isLogged && /login/i.test(location?.pathname)) {
-      navigate("/home");
+    if (isLogged) {
+      const isLoginPage = /login/i.test(location.pathname);
+      navigate(isLoginPage ? "/home" : location.pathname);
     }
     if (!isLogged) {
       checkSession(location.pathname);
     }
-  }, [location]);
+  }, [location?.pathname]);
 };

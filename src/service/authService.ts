@@ -14,7 +14,7 @@ export const authService = makeService('/auth', ({ get, post }) => {
     }
 
     const session = async () => {
-        const { response } = get<boolean>('/session')
+        const { response } = get<User>('/session')
         return response.then(parseResponseData)
     }
     

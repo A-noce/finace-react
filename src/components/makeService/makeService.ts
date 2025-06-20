@@ -2,7 +2,7 @@ import { ApiResponse, ApisauceInstance } from "apisauce";
 import { AxiosRequestConfig, Canceler } from "axios";
 import { apiSauceInstance, cancelTokenSource } from "./api";
 import { systemConfig } from "@utils/systemConfig";
-import qs from 'qs'
+import qs from "qs";
 export interface ReturnMethods<S> {
   cancel: Canceler;
   response: Promise<ApiResponse<S, S>>;
@@ -100,6 +100,7 @@ export const makeService = <T>(path: string, func: (method: Methods) => T) => {
     const response = api.get<T>("", params, {
       ...axiosConfig,
       params,
+      withCredentials: true,
       paramsSerializer: (params) => {
         return qs.stringify(params, { arrayFormat: "comma" });
       },
@@ -123,6 +124,7 @@ export const makeService = <T>(path: string, func: (method: Methods) => T) => {
     const source = cancelTokenSource();
     const response = api.post<T>("", data, {
       ...axiosConfig,
+      withCredentials: true,
       cancelToken: source.token,
       baseURL: getUrl(path),
     });
@@ -143,6 +145,7 @@ export const makeService = <T>(path: string, func: (method: Methods) => T) => {
     const source = cancelTokenSource();
     const response = api.put<T>("", data, {
       ...axiosConfig,
+      withCredentials: true,
       cancelToken: source.token,
       baseURL: getUrl(path),
     });
@@ -166,6 +169,7 @@ export const makeService = <T>(path: string, func: (method: Methods) => T) => {
       {},
       {
         ...axiosConfig,
+        withCredentials: true,
         cancelToken: source.token,
         baseURL: getUrl(path),
       }
@@ -187,6 +191,7 @@ export const makeService = <T>(path: string, func: (method: Methods) => T) => {
     const source = cancelTokenSource();
     const response = api.patch<T>("", data, {
       ...axiosConfig,
+      withCredentials: true,
       cancelToken: source.token,
       baseURL: getUrl(path),
     });
