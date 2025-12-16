@@ -4,12 +4,17 @@ import useFormElement from "@components/form/CustomFormElements/useFormElement";
 import { usePaginatedList } from "@hooks/usePaginatedList";
 import useService from "@hooks/useServicw";
 import { tagService } from "@service/tagService";
-import { FormFilterTag, TagResponse } from "@typing/tag.type";
+import {
+  FormFilterTag,
+  formFilterTagChipUtil,
+  TagResponse,
+} from "@typing/tag.type";
 import { useMemo } from "react";
 import { FaPen } from "react-icons/fa";
 import zod from "zod";
 import useThemeBreakPoints from "@hooks/useThemeBreakPoints";
 import { useModal } from "@hooks/useModal";
+import { useFilterChip } from "@hooks/useFilterChip";
 
 export const useTag = () => {
   const filterTags = useService(tagService).filterTags;
@@ -17,8 +22,11 @@ export const useTag = () => {
     onClose,
     onOpen,
     data: modalData,
-  } = useModal<"new" | number | "filter" >({ });
+  } = useModal<"new" | number | "filter">({});
   const { isMatch: isDownSm } = useThemeBreakPoints(["down", "sm"]);
+  const { filterChip, onChangeFilter } = useFilterChip({
+    recordFieldUtils: formFilterTagChipUtil,
+  });
   const {
     data,
     loading,
@@ -34,15 +42,16 @@ export const useTag = () => {
     control,
     reset: resetForm,
     handleSubmit,
-    getValues
+    getValues,
+    resetField,
   } = useFormElement<FormFilterTag>({
     defaultValues: {
       name: "",
       color: "",
       startDate: "",
       endDate: "",
-      description:"",
-      userCreatorId: null
+      description: "",
+      userCreatorId: null,
     },
     validation: zod.object({
       name: zod.string(),
@@ -50,7 +59,7 @@ export const useTag = () => {
       startDate: zod.string(),
       endDate: zod.string(),
       description: zod.string(),
-      userCreatorId: zod.number().nullable()
+      userCreatorId: zod.number().nullable(),
     }),
   });
 
@@ -60,6 +69,7 @@ export const useTag = () => {
 
   const handleFilterSubmit = (filter: FormFilterTag) => {
     handleChangeParams(filter);
+    onChangeFilter(filter);
     onClose();
   };
 
@@ -71,15 +81,24 @@ export const useTag = () => {
   };
 
   const reSearch = () => {
-    handleChangeParams(getValues())
-  }
+    handleChangeParams(getValues());
+  };
+
+  const handleRemove = (key: keyof FormFilterTag) => {
+    return () => {
+      let form = getValues();
+      onChangeFilter(form);
+      resetField(key);
+      handleFilterSubmit(form);
+    };
+  };
 
   const columns: ColumnsProps<TagResponse>[] = useMemo(() => {
     const tempColumns: ColumnsProps<TagResponse>[] = [
       {
         field: "name",
         title: "Nome",
-        enableSort: true
+        enableSort: true,
       },
       {
         field: "color",
@@ -93,7 +112,7 @@ export const useTag = () => {
       },
     ];
     if (!isDownSm) return tempColumns;
-    return tempColumns.splice(2)
+    return tempColumns.splice(2);
   }, [isDownSm]);
 
   const action: ColumnAction<TagResponse>[] = [
@@ -118,7 +137,9 @@ export const useTag = () => {
     formId: "tag-form-filter",
     openFilter: () => onOpen("filter"),
     closeModal: () => onClose(),
-    createTag: () => onOpen('new'),
-    reSearch
+    createTag: () => onOpen("new"),
+    reSearch,
+    handleRemove,
+    filterChip,
   };
 };

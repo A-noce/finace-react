@@ -6,6 +6,7 @@ import ModalFilter from "./ModalFilterTag";
 import ModalTag from "./ModalTag";
 import { FaPlus } from "react-icons/fa";
 import CustomFab from "@components/input/CustomFab";
+import RenderFilterChip from "@components/RenderFilterChip";
 
 const Tags = () => {
   const {
@@ -18,12 +19,19 @@ const Tags = () => {
     closeModal,
     createTag,
     reSearch,
+    filterChip,
+    handleRemove,
     ...rest
   } = useTag();
   return (
     <Grid container rowGap={1} direction="column">
-      <Grid>
+      <Grid container direction='column' rowGap={0.5}>
+        <Grid>
         <FilterTag {...rest} />
+        </Grid>
+        <Grid>
+          <RenderFilterChip {...{handleRemove, filterChip}}/>
+        </Grid>
       </Grid>
       <Grid
         size={{ xs: "grow" }}

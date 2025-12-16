@@ -21,7 +21,6 @@ const userStore = createStore<UserStore>(
   changePageStatus: (newStatus: StatusEnum) => set("pageStatus", newStatus),
   setUser: (user: Null<User>) => {
     set("user", user);
-    console.log({user})
     set("isLogged", !!user);
   },
 }));

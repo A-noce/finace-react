@@ -7,7 +7,6 @@ import { useTracked } from "zustand-x";
 
 export const PrivateRoutes = () => {
   const isLogged = useTracked(userStore, "isLogged");
-  console.log({isLogged})
   const component = isLogged ? <Outlet /> : <Navigate to="/login" replace />;
   return (
     <>

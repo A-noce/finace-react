@@ -9,6 +9,7 @@ import { Box } from "@mui/material";
 import { tagService } from "@service/tagService";
 import { transactionService } from "@service/transactionService";
 import { TransactionPeriodEnum } from "@typing/enums";
+import { FilterChipProps } from "@typing/generic";
 import {
   FormFilterTransaction,
   periodicityEnumToString,
@@ -16,7 +17,7 @@ import {
 } from "@typing/transaction.type";
 import { convertToCurrency } from "@utils/converterutils";
 import { formatDate } from "@utils/dateUtils";
-import { HTMLAttributes, useMemo } from "react";
+import { HTMLAttributes, useMemo, useState } from "react";
 import { FaPen } from "react-icons/fa6";
 import zod from "zod";
 
@@ -28,6 +29,7 @@ export const useTransaction = () => {
     onOpen,
     data: modalData,
   } = useModal<"new" | number | "filter">({});
+const 
   const {
     data,
     loading,

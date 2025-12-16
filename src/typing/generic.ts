@@ -79,3 +79,8 @@ export interface Paginated<T> {
   data: T[];
   total: number;
 }
+
+export interface FilterChipProps<T extends Record<string, any>> {
+  key: keyof T
+  label: string
+}

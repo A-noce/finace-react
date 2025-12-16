@@ -49,3 +49,24 @@ export const weekdayEnumToString: Record<WeekdaysEnum, string> = {
   [WeekdaysEnum.FRIDAY]: "Friday",
   [WeekdaysEnum.SATURDAY]: "Saturday",
 };
+
+export const formFilterTagChipUtil: Record<
+  string,
+  {
+    label: string;
+    formater?: (value: FormFilterTransaction[keyof FormFilterTransaction]) => string;
+  }
+> = {
+    title: string;
+  description: string;
+  periodicity: TransactionPeriodEnum;
+  periodValue: string | WeekdaysEnum[];
+  value: number;
+    listInputTagId: number[];
+  listOutputTagId: number[];
+    periodicity?: TransactionPeriodEnum[];
+  startDate?: string;
+  endDate?: string;
+  minimumValue?: number;
+  maximumValue?: number;
+};

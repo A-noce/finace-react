@@ -81,3 +81,8 @@ export const isCnpjValid =(cnpj: string) => {
 
     return true;
 }
+
+export const hasNoValue = (value: unknown) => {
+  const isEmpty = [Array.isArray(value) && !value.length, !value, value && typeof value === 'object' && !Object.values(value).length]
+  return isEmpty.some(Boolean)
+}

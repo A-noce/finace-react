@@ -10,7 +10,7 @@ import { useSession } from "@hooks/useSession";
 const BodyContainer = ({ children }: PropsWithChildren<any>) => {
   const open = useTracked(configStore, 'drawerOpen')
   const sx = useStylesBodyContainer({ open });
-  useSession()
+  //useSession()
 
   return (
     <React.Suspense fallback={"carregando..."}>

@@ -25,7 +25,6 @@ export const useLogin = () => {
     setIsLoading(true);
     const response = await login(form);
     if (response.success) {
-        console.log({r: response})
       setUser(response.body);
       setSnackProps("Logado com sucesso", "success");
       navigate("/home");

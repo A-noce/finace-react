@@ -21,7 +21,6 @@ const AvatarButton = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh",
       }}
     >
       <IconButton
